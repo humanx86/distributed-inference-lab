@@ -24,7 +24,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # isolate Python from the system installation
-ENV VIRTUAL_ENV=/home/${USERNAME}/.venv
+ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 
 RUN python3.12 -m venv "${VIRTUAL_ENV}"
