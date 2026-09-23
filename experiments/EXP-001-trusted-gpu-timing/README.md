@@ -19,5 +19,14 @@ Timing work has not started.
 - `gpu_lab.cu`: supplied teaching harness
 - `cpu_models.py`: supplied CPU conceptual checks
 
+### RUN-001 — vector-add correctness
+
+- Build: `BUILD-001-vector-add`
+- Purpose: retained correctness check for the personal vector-add implementation
+- Sizes: `1, 255, 256, 257, 1000, 1024`
+- Result: PASS for all tested sizes
+- Exit status: `0`
+- Evidence: `runs/RUN-001-vector-add-correctness/`
+
 ## Next
 Adding timers
