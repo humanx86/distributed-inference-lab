@@ -120,6 +120,23 @@ struct Options {
     double atol = 1e-4, rtol = 1e-4;
     bool check_only = false;
 };
+int parse_count(const std::string& value, const std::string& option) {
+    if (value.empty() || !std::all_of(value.begin(), value.end(),
+                                    [](char c) { return c >= '0' && c <= '9'; }))
+        throw std::runtime_error("Use decimal digits for " + option);
+    size_t used = 0;
+    unsigned long long count = std::stoull(value, &used, 10);
+    if (used != value.size() || count > static_cast<unsigned long long>(std::numeric_limits<int>::max()))
+        throw std::runtime_error("Out-of-range count for " + option);
+    return static_cast<int>(count);
+}
+double parse_tolerance(const std::string& value, const std::string& option) {
+    size_t used = 0;
+    double tolerance = std::stod(value, &used);
+    if (used != value.size() || !std::isfinite(tolerance) || tolerance < 0)
+        throw std::runtime_error("Invalid tolerance for " + option);
+    return tolerance;
+}
 Options parse(int argc, char** argv) {
     Options o;
     for (int i = 1; i < argc; ++i) {
@@ -129,7 +146,8 @@ Options parse(int argc, char** argv) {
             std::cout << "--op copy|add|transform|reduce --variant pair|tree|warp|cub\n"
                       << "--n N --block 128|256|512 --warmup W --samples S --batch B\n"
                       << "--dataset dyadic|random|ones --gap-us U --atol A --rtol R\n"
-                      << "--check-only (all operations/variants, small boundary inputs)\n";
+                      << "--check-only (all operations/variants, small boundary inputs)\n"
+                      << "Integer sizes/counts use decimal digits: 1000000, not 1e6.\n";
             std::exit(0);
         }
         if (++i == argc) throw std::runtime_error("Missing value for " + k);
@@ -137,14 +155,14 @@ Options parse(int argc, char** argv) {
         if (k == "--op") o.op = v;
         else if (k == "--variant") o.variant = v;
         else if (k == "--dataset") o.dataset = v;
-        else if (k == "--n") { if (v.empty() || v[0]=='-') throw std::runtime_error("Invalid N"); o.n = std::stoull(v); }
-        else if (k == "--block") o.block = std::stoi(v);
-        else if (k == "--warmup") o.warmup = std::stoi(v);
-        else if (k == "--samples") o.samples = std::stoi(v);
-        else if (k == "--batch") o.batch = std::stoi(v);
-        else if (k == "--gap-us") o.gap_us = std::stoi(v);
-        else if (k == "--atol") o.atol = std::stod(v);
-        else if (k == "--rtol") o.rtol = std::stod(v);
+        else if (k == "--n") o.n = parse_count(v, k);
+        else if (k == "--block") o.block = parse_count(v, k);
+        else if (k == "--warmup") o.warmup = parse_count(v, k);
+        else if (k == "--samples") o.samples = parse_count(v, k);
+        else if (k == "--batch") o.batch = parse_count(v, k);
+        else if (k == "--gap-us") o.gap_us = parse_count(v, k);
+        else if (k == "--atol") o.atol = parse_tolerance(v, k);
+        else if (k == "--rtol") o.rtol = parse_tolerance(v, k);
         else throw std::runtime_error("Unknown option " + k);
     }
     if (o.op!="copy" && o.op!="add" && o.op!="transform" && o.op!="reduce") throw std::runtime_error("Invalid op");
@@ -185,6 +203,7 @@ struct Work {
             Range range("H2D setup");
             CUDA_OK(cudaMemcpy(x.p, hx.data(), o.n*sizeof(float), cudaMemcpyHostToDevice));
             CUDA_OK(cudaMemcpy(y.p, hy.data(), o.n*sizeof(float), cudaMemcpyHostToDevice));
+            CUDA_OK(cudaDeviceSynchronize()); // complete setup before any consumer; outside timing
         }
         if (o.op=="reduce" && o.variant=="cub" && o.n) {
             CUDA_OK(cub::DeviceReduce::Sum(nullptr, cub_bytes, x.p, result.p, int(o.n), stream.s));
