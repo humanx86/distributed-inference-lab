@@ -1,0 +1,2 @@
+gpu=NVIDIA GeForce RTX 5070 Ti Laptop GPU cc=12.0 SMs=46 L2_bytes=37748736 memory_bytes=12346195968 driver_api=13040 runtime_api=13040 CUB_VERSION=300402
+nvtx=disabled (rebuild with LAB_USE_NVTX for the annotated-trace exercise)

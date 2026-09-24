@@ -1,0 +1,1 @@
+PASS boundary suite at block=512; this is not a proof for arbitrary inputs

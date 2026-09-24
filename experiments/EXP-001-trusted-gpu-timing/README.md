@@ -28,5 +28,18 @@ Timing work has not started.
 - Exit status: `0`
 - Evidence: `runs/RUN-001-vector-add-correctness/`
 
+## Harness correctness
+
+Build: `BUILD-004-gpu-lab`
+
+Retained correctness runs:
+
+- `RUN-003-harness-block128` — PASS, exit 0
+- `RUN-004-harness-block256` — PASS, exit 0
+- `RUN-005-harness-block512` — PASS, exit 0
+
+This supports correctness for the harness's tested sizes,
+datasets, operations, and reduction variants under this retained build.
+
 ## Next
 Adding timers
