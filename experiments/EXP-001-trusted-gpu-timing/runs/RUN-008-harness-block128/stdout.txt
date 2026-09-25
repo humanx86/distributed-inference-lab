@@ -1,0 +1,3 @@
+PASS last-valid-element fixture N=1003 variant=tree block=128
+OBS cancellation fixture N=3 variant=pair block=128 device=0 reference=1 abs_error=1 tolerance=0.0002 within_tolerance=no
+PASS boundary suite at block=128; this is not a proof for arbitrary inputs

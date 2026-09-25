@@ -41,5 +41,17 @@ Retained correctness runs:
 This supports correctness for the harness's tested sizes,
 datasets, operations, and reduction variants under this retained build.
 
+### BUILD-005 harness correctness
+
+- `RUN-008-harness-block128` — PASS
+- `RUN-009-harness-block256` — PASS
+- `RUN-010-harness-block512` — PASS
+
+Each run passed the ordinary boundary suite and the targeted
+last-valid-element fixture. The cancellation fixture produced the
+expected order-sensitive observation:
+
+`device=0`, `reference=1`, `abs_error=1`, `within_tolerance=no`.
+
 ## Next
 Adding timers

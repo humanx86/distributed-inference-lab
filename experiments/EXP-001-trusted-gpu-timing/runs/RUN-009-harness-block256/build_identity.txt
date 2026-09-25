@@ -1,0 +1,5 @@
+build_id=BUILD-005-gpu-lab
+build_directory=/workspaces/distributed-inference-lab/build/EXP-001-trusted-gpu-timing/BUILD-005-gpu-lab
+binary=/workspaces/distributed-inference-lab/build/EXP-001-trusted-gpu-timing/BUILD-005-gpu-lab/gpu_lab
+binary_sha256=ca28aca7eda4b6c13145b4b033257f48141d8d889fb98b7131fe9b7180a7c61c
+source_commit=9254df2824f3ed9a095b84ba21ad5ebeed378ed6
