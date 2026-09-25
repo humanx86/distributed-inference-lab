@@ -1,0 +1,14 @@
+case=add-large
+op=add
+n=1048576
+variant=na
+block=256
+warmup=5
+samples=8
+batch=1
+dataset=dyadic
+gap_us=0
+atol=1e-4
+rtol=1e-4
+expected_rows=8
+cache_policy=repeated same input; no eviction; warm/cache-resident possible

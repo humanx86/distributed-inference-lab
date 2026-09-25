@@ -1,0 +1,1 @@
+command=/workspaces/distributed-inference-lab/build/EXP-001-trusted-gpu-timing/BUILD-005-gpu-lab/gpu_lab --op add --n 1003 --block 256 --warmup 5 --samples 8 --batch 1 --dataset dyadic --gap-us 0 --atol 1e-4 --rtol 1e-4 
