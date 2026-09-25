@@ -1,0 +1,5 @@
+========= COMPUTE-SANITIZER
+PASS last-valid-element fixture N=1003 variant=tree block=256
+OBS cancellation fixture N=3 variant=pair block=256 device=0 reference=1 abs_error=1 tolerance=0.0002 within_tolerance=no
+PASS boundary suite at block=256; this is not a proof for arbitrary inputs
+========= RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)

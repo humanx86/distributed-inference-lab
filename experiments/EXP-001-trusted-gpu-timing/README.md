@@ -53,5 +53,19 @@ expected order-sensitive observation:
 
 `device=0`, `reference=1`, `abs_error=1`, `within_tolerance=no`.
 
+### BUILD-005 sanitizer validation
+
+Block-256 `--check-only` suite:
+
+- `RUN-011-sanitizer-memcheck` — clean completion, 0 reported errors
+- `RUN-012-sanitizer-racecheck` — clean completion, 0 hazards
+- `RUN-013-sanitizer-synccheck` — clean completion, 0 reported errors
+
+Compute Sanitizer: 2026.3.0.0.
+
+These results cover only the executed paths, they do not
+prove general memory safety, race freedom, synchronization correctness,
+or timing validity.
+
 ## Next
 Adding timers

@@ -1,0 +1,1 @@
+command=/usr/local/cuda/bin/compute-sanitizer --tool memcheck --error-exitcode 3 /workspaces/distributed-inference-lab/build/EXP-001-trusted-gpu-timing/BUILD-005-gpu-lab/gpu_lab --check-only 

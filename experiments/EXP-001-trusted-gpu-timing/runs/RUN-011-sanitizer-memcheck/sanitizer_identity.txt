@@ -1,0 +1,6 @@
+sanitizer=/usr/local/cuda/bin/compute-sanitizer
+tool=memcheck
+error_exitcode=3
+NVIDIA (R) Compute Sanitizer
+Copyright (c) 2020-2026 NVIDIA Corporation
+Version 2026.3.0.0 (build 38637409) (public-release)
