@@ -1,0 +1,59 @@
+{
+  "name": "Distributed Inference Lab",
+
+  "build": {
+    "dockerfile": "../../containers/cuda/Dockerfile",
+    "context": "../../containers/cuda"
+  },
+
+  "remoteUser": "root",
+  "updateRemoteUserUID": false,
+
+  "hostRequirements": {
+    "gpu": true
+  },
+
+  "runArgs": [
+    "--gpus=${localEnv:DEVCONTAINER_GPUS:all}",
+    "--umask=0022"
+  ],
+
+  "containerEnv": {
+    "CUDA_HOME": "/usr/local/cuda",
+    "PYTHONUNBUFFERED": "1",
+    "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+
+    "PIP_CACHE_DIR": "/root/.cache/pip",
+    "TRITON_CACHE_DIR": "/root/.cache/triton",
+    "TORCH_EXTENSIONS_DIR": "/root/.cache/torch_extensions"
+  },
+
+  "mounts": [
+    "source=${localWorkspaceFolderBasename}-cuda-cache,target=/root/.cache,type=volume"
+  ],
+
+  "postCreateCommand": "python -m pip install -r requirements-dev.txt && python -m pip check",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "NVIDIA.nsight-vscode-edition",
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ],
+
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/venv/bin/python",
+
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": [
+          "verifier/tests_public"
+        ],
+
+        "C_Cpp.default.compilerPath": "/usr/bin/g++"
+      }
+    }
+  }
+}

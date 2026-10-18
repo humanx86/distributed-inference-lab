@@ -1,0 +1,36 @@
+schema: distributed-inference-environment-v1
+recorded_at: "2026-10-18"
+host:
+  os: "Ubuntu 26.04.1 LTS"
+  kernel: "7.0.0-38-generic"
+  architecture: x86_64
+  cpu: "Intel(R) Core(TM) Ultra 9 275HX"
+  logical_cpus: 24
+  gpu_name: "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+  compute_capability: "12.0"
+  gpu_total_memory_mib: 12227
+  available_memory_bytes: 12332302336
+  driver: "595.99.02"
+container:
+  image_ref_with_digest: null
+  container_toolkit_version: "1.20.1"
+  framework_version: "torch==2.13.0+cu132"
+  python_version: "3.12.3"
+  python_executable: /opt/venv/bin/python
+  pytorch_build_cuda: "13.2"
+  cuda_runtime: "nvidia-cuda-runtime==13.2.75"
+  compiler: "nvcc 13.4.59 (CUDA compilation tools release 13.4)"
+  engine_commit: null
+  backend_commit: null
+  package_lock_path: environment/python-freeze.txt
+experiment:
+  source_commit: null
+  build_command: null 
+  target_architectures: []
+acceptance:
+  tensor_correctness: passed
+  profiler_access: passed
+  actual_backend: "PyTorch eager CUDA tensor addition"
+  notes: |
+    Pass is limited to elementwise addition of two three-element float32 tensors
+    explicitly created on cuda:0
