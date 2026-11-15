@@ -1,0 +1,13 @@
+PASS: gather_rows_cpu repeated-index fixture
+PASS: gather_rows_cpu output-row-count fixture
+PASS: negative index rejected
+PASS: upper-bound index rejected
+PASS: rejected zero rows
+PASS: rejected zero cols
+PASS: rejected empty indices
+PASS: rejected data shorter than shape
+PASS: rejected data longer than shape
+PASS: single-row input fixture
+PASS: output storage is independent
+PASS: rejected input shape overflow
+PASS: rejected output shape overflow

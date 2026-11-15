@@ -1,0 +1,27 @@
+utc=2026-11-15T14:36:41Z
+mode=sanitized
+ASAN_OPTIONS=<unset>
+UBSAN_OPTIONS=<unset>
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+889f5b4c84a6185ca857d9731e4660d55204c84f6268d5505bb96fbeef12b899  experiments/EXP-001-model-execution/src/gather_rows_cpu.hpp
+717667681cf576756040f8c393fd7b0563df12ec2d2c7f5e3aa28dca7a3a6245  experiments/EXP-001-model-execution/src/gather_rows_cpu.cpp
+2879dadb025b5874548b1ed7432e4382939403c2485dfdee2ec320614de1bb96  experiments/EXP-001-model-execution/tests/gather_rows_cpu_test.cpp
+compile_command=g++ -std=c++17 -Wall -Wextra -Wconversion -Wsign-conversion -pedantic -O1 -g -fsanitize=address\,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer experiments/EXP-001-model-execution/src/gather_rows_cpu.cpp experiments/EXP-001-model-execution/tests/gather_rows_cpu_test.cpp -o build/EXP-001-model-execution/gather_rows_cpu_test_sanitized 
+PASS: gather_rows_cpu repeated-index fixture
+PASS: gather_rows_cpu output-row-count fixture
+PASS: negative index rejected
+PASS: upper-bound index rejected
+PASS: rejected zero rows
+PASS: rejected zero cols
+PASS: rejected empty indices
+PASS: rejected data shorter than shape
+PASS: rejected data longer than shape
+PASS: single-row input fixture
+PASS: output storage is independent
+PASS: rejected input shape overflow
+PASS: rejected output shape overflow
+build_and_test_exit=0
