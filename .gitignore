@@ -65,3 +65,6 @@ checkpoints/
 
 .DS_Store
 Thumbs.db
+
+# Exploratory CUDA smoke logs
+/experiments/EXP-001-model-execution/results/gather_rows_cuda_smoke_*.log

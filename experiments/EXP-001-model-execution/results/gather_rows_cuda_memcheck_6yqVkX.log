@@ -1,0 +1,35 @@
+utc=2026-11-17T10:59:03Z
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2026 NVIDIA Corporation
+Built on Mon_Aug_03_13:24:11_PDT_2026
+Cuda compilation tools, release 13.4, V13.4.59
+Build cuda_13.4.r13.4/compiler.38657139_0
+NVIDIA (R) Compute Sanitizer
+Copyright (c) 2020-2026 NVIDIA Corporation
+Version 2026.3.0.0 (build 38637409) (public-release)
+889f5b4c84a6185ca857d9731e4660d55204c84f6268d5505bb96fbeef12b899  experiments/EXP-001-model-execution/src/gather_rows_cpu.hpp
+717667681cf576756040f8c393fd7b0563df12ec2d2c7f5e3aa28dca7a3a6245  experiments/EXP-001-model-execution/src/gather_rows_cpu.cpp
+b540a226c8dd031a16167301d4cd1bb7b1460710f423bcee66a0607dae4117c9  experiments/EXP-001-model-execution/src/gather_rows_cuda.hpp
+ced40f04cb8834d5e9c1173aa44d459d941098459e0758f6db1be6bc0777e53f  experiments/EXP-001-model-execution/src/gather_rows_cuda.cu
+f42fba5c5f639c2b0ce7a29b48bbe5f207774c44b8c73802933d7f1316ff77d2  experiments/EXP-001-model-execution/tests/gather_rows_cuda_test.cpp
+compile_command=nvcc -std=c++17 -arch=native -lineinfo -Xcompiler=-Wall\,-Wextra experiments/EXP-001-model-execution/src/gather_rows_cpu.cpp experiments/EXP-001-model-execution/src/gather_rows_cuda.cu experiments/EXP-001-model-execution/tests/gather_rows_cuda_test.cpp -o build/EXP-001-model-execution/gather_rows_cuda_test_memcheck 
+f68eec1e61cdc3c1e8960e7dc8d6eab3c3675def0ee98384e00e54b8dc2ade6e  build/EXP-001-model-execution/gather_rows_cuda_test_memcheck
+memcheck_command=compute-sanitizer --tool memcheck --leak-check full --padding 32 --error-exitcode 99 build/EXP-001-model-execution/gather_rows_cuda_test_memcheck 
+========= COMPUTE-SANITIZER
+gpu=NVIDIA GeForce RTX 5070 Ti Laptop GPU
+compute_capability=12.0
+PASS: CUDA gather matches CPU and hand-calculated fixture
+PASS: CUDA gather 513-element boundary fixture
+PASS: CUDA gather single-row repeated-index fixture
+PASS: CUDA gather rejects negative index
+PASS: CUDA gather rejects index equal to row count
+PASS: CUDA gather rejects zero rows
+PASS: CUDA gather rejects zero columns
+PASS: CUDA gather rejects empty indices
+PASS: CUDA gather rejects storage shorter than declared shape
+PASS: CUDA gather rejects storage longer than declared shape
+PASS: CUDA gather rejects input shape overflow
+PASS: CUDA gather rejects output shape overflow
+========= LEAK SUMMARY: 0 bytes leaked in 0 allocations
+========= ERROR SUMMARY: 0 errors
+build_and_memcheck_exit=0

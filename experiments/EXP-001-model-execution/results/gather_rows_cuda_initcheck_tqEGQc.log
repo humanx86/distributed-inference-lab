@@ -1,0 +1,24 @@
+utc=2026-11-17T11:04:27Z
+NVIDIA (R) Compute Sanitizer
+Copyright (c) 2020-2026 NVIDIA Corporation
+Version 2026.3.0.0 (build 38637409) (public-release)
+build/EXP-001-model-execution/gather_rows_cuda_test_memcheck: OK
+f68eec1e61cdc3c1e8960e7dc8d6eab3c3675def0ee98384e00e54b8dc2ade6e  build/EXP-001-model-execution/gather_rows_cuda_test_memcheck
+initcheck_command=compute-sanitizer --tool initcheck --check-api-memory-access yes --error-exitcode 99 build/EXP-001-model-execution/gather_rows_cuda_test_memcheck 
+========= COMPUTE-SANITIZER
+gpu=NVIDIA GeForce RTX 5070 Ti Laptop GPU
+compute_capability=12.0
+PASS: CUDA gather matches CPU and hand-calculated fixture
+PASS: CUDA gather 513-element boundary fixture
+PASS: CUDA gather single-row repeated-index fixture
+PASS: CUDA gather rejects negative index
+PASS: CUDA gather rejects index equal to row count
+PASS: CUDA gather rejects zero rows
+PASS: CUDA gather rejects zero columns
+PASS: CUDA gather rejects empty indices
+PASS: CUDA gather rejects storage shorter than declared shape
+PASS: CUDA gather rejects storage longer than declared shape
+PASS: CUDA gather rejects input shape overflow
+PASS: CUDA gather rejects output shape overflow
+========= ERROR SUMMARY: 0 errors
+initcheck_exit=0
