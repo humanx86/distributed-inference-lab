@@ -68,3 +68,12 @@ Thumbs.db
 
 # Exploratory CUDA smoke logs
 /experiments/EXP-001-model-execution/results/gather_rows_cuda_smoke_*.log
+
+/experiments/EXP-001-model-execution/results/**/gpu_before.txt
+/experiments/EXP-001-model-execution/results/**/gpu_after.txt
+
+/experiments/EXP-001-model-execution/results/gather_large_oyVOb4/binary.sha256
+/experiments/EXP-001-model-execution/results/gather_repeat_dDkRvf/
+/experiments/EXP-001-model-execution/results/gather_repeat_gtvrci/
+/experiments/EXP-001-model-execution/results/gather_rows_cuda_normal_eijCv4.log
+/experiments/EXP-001-model-execution/results/gather_timing_1ZcmWA/

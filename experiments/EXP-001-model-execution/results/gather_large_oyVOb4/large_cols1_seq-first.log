@@ -1,0 +1,4 @@
+gpu=NVIDIA GeForce RTX 5070 Ti Laptop GPU
+l2_bytes=37748736
+data_seed=17
+shuffle_seed=42

@@ -98,13 +98,3 @@ Earlier separate runs are retained as supporting records:
 
 Memcheck used `--leak-check full --padding 32 --error-exitcode 99`.
 Initcheck used `--check-api-memory-access yes --error-exitcode 99`.
-
-## Limits and remaining work
-
-Passing tests and sanitizers support the exercised paths, not every possible
-input. Overflow fixtures use huge dimensions with tiny vectors to test
-rejection order; they do not test large allocations or byte-count overflow.
-No isolated sanitizer negative control or injected CUDA failure has been tested.
-There are no performance results yet.
-
-The timing part remains open.

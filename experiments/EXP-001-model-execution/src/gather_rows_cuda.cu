@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <string>
+#include <chrono>
 
 namespace {
 
@@ -53,6 +54,33 @@ public:
 
 private:
     void* ptr_ = nullptr;
+};
+
+class CudaEvent {
+public:
+    CudaEvent() {
+        check_cuda(cudaEventCreate(&event_), "cudaEventCreate");
+    }
+
+    ~CudaEvent() noexcept {
+        if (event_ != nullptr) {
+            const auto status = cudaEventDestroy(event_);
+
+            if (status != cudaSuccess) {
+                std::fprintf(stderr, "cudaEventDestroy during cleanup: %s\n", cudaGetErrorString(status));
+            }
+        }
+    }
+
+    CudaEvent(const CudaEvent&) = delete;
+    CudaEvent& operator=(const CudaEvent&) = delete;
+
+    cudaEvent_t get() const noexcept {
+        return event_;
+    }
+
+private:
+    cudaEvent_t event_ = nullptr;
 };
 
 std::size_t validate_gather_inputs( const Matrix& input,
@@ -119,8 +147,14 @@ __global__ void gather_all_rows_kernel( const float* input,
 }
 
 
-Matrix gather_rows_cuda( const Matrix& input, 
-                         const std::vector<std::int64_t>& indices ) {
+Matrix gather_rows_cuda(const Matrix& input, 
+                         const std::vector<std::int64_t>& indices,
+                         std::vector<float>& device_event_us,
+                         std::vector<GatherHostSample>& host_samples) {
+
+    if (device_event_us.empty()) {
+        throw std::invalid_argument("At least one timing sample is required");
+    }
 
     const std::size_t total = validate_gather_inputs(input, indices);
 
@@ -173,15 +207,50 @@ Matrix gather_rows_cuda( const Matrix& input,
 
     check_cuda(cudaGetLastError(), "CUDA state before gather launch");
 
-    gather_all_rows_kernel<<<blocks, threads_per_block>>>(
-        static_cast<const float*>(d_input.get()),
-        static_cast<const std::int64_t*>(d_indices.get()),
-        static_cast<float*>(d_output.get()),
-        out_rows,
-        cols);
+    CudaEvent start;
+    CudaEvent stop;
 
-    check_cuda(cudaGetLastError(), "gather kernel launch");
-    check_cuda(cudaDeviceSynchronize(), "gather kernel execution");
+    check_cuda(cudaStreamSynchronize(0), "finish setup before timing");
+
+    const auto launch_gather = [&]() {
+        gather_all_rows_kernel<<<blocks, threads_per_block>>>(
+            static_cast<const float*>(d_input.get()),
+            static_cast<const std::int64_t*>(d_indices.get()),
+            static_cast<float*>(d_output.get()),
+            out_rows,
+            cols);
+    };
+
+    for (float& sample_us : device_event_us) {
+        check_cuda(cudaEventRecord(start.get(), 0), "record start");
+
+        launch_gather();
+        check_cuda(cudaGetLastError(), "gather kernel launch");
+
+        check_cuda(cudaEventRecord(stop.get(), 0), "record stop");
+        check_cuda(cudaEventSynchronize(stop.get()), "wait for gather");
+
+        float elapsed_ms = 0.0f;
+        check_cuda(cudaEventElapsedTime(&elapsed_ms, start.get(), stop.get()), "read gather interval");
+        sample_us = elapsed_ms * 1000.0f;
+    }
+    
+    using Clock = std::chrono::steady_clock;
+    using Microseconds = std::chrono::duration<double, std::micro>;
+
+    for (GatherHostSample& sample : host_samples) {
+        const auto h0 = Clock::now();
+        launch_gather();
+        const auto h1 = Clock::now();
+
+        check_cuda(cudaGetLastError(), "host-timed gather launch");
+        const auto wait_status = cudaStreamSynchronize(0);
+        const auto h2 = Clock::now();
+        check_cuda(wait_status, "host-timed gather execution");
+
+        sample.enqueue_us = Microseconds(h1 - h0).count();
+        sample.synchronized_us = Microseconds(h2 - h0).count();
+    }
 
     check_cuda(cudaMemcpy(output.data.data(), d_output.get(),
                output_bytes, cudaMemcpyDeviceToHost), "copy output to CPU");
@@ -192,4 +261,11 @@ Matrix gather_rows_cuda( const Matrix& input,
 
     return output;
 
+}
+
+Matrix gather_rows_cuda(const Matrix& input,
+                        const std::vector<std::int64_t>& indices,
+                        std::vector<float>& device_event_us) {
+    std::vector<GatherHostSample> no_host_samples;
+    return gather_rows_cuda(input, indices, device_event_us, no_host_samples);
 }
